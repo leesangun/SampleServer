@@ -16,20 +16,15 @@ namespace ServerCShop0
 
         public Server() : base(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
         {
-            // 포트는 10000을 Listen한다.
             base.Bind(new IPEndPoint(IPAddress.Any, 4000));
             base.Listen(0);
-            // 비동기 소켓으로 Accept 클래스로 대기한다.
             BeginAccept(Accept, this);
         }
-        // 클라이언트가 접속하면 함수가 호출된다.
+
         private void Accept(IAsyncResult result)
         {
-            // EndAccept로 접속 Client Socket을 받는다. EndAccept는 대기를 끝나는 것이다.
-            // Client 클래스를 생성한다.
             var client = new Client(EndAccept(result));
             _listClient.Add(client);
-            // 비동기 소켓으로 Accept 클래스로 대기한다.
             BeginAccept(Accept, this);
         }
 
