@@ -22,7 +22,7 @@ namespace ServerCShop0
         {
             ResMessage r = new ResMessage
             {
-                key = EnumKey.RES_MESSAGE,
+                key = EnumKey.res_message,
                 message = "전체응답"
             };
             var options = new JsonSerializerOptions

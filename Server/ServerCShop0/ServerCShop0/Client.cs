@@ -10,38 +10,110 @@ namespace ServerCShop0
 {
     class OnReceiveFn
     {
-        private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+        struct DataClient
         {
-            WriteIndented = true
-        };
-        private ResMessage _resMessage = new ResMessage();
+            public string nick;
+        }
+        private DataClient _dataClient = new DataClient();
 
-        public void ReqMessage(Client client,ReqMessage req)
+        private Client _client;
+        public OnReceiveFn(Client client)
+        {
+            _client = client;
+        }
+        
+
+        public void ReqLogin(ReqLogin req)
+        {
+            Console.WriteLine(req.nick);
+            _dataClient.nick = req.nick;
+
+            Protocol._resLogin.key = EnumKey.res_login;
+            Protocol._resLogin.result = EnumResResult.SUCCESS;
+
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(Protocol._resLogin, Protocol._jsonSerializerOptions);
+
+
+            _client.Send(bytes);
+        }
+
+        public void ReqRoomAreaJoin(ReqRoomAreaJoin req)
+        {
+            Console.WriteLine(req.idRoom);
+
+            _client.Join(req.idRoom);
+
+            Protocol._resRoomAreaJoin.key = EnumKey.res_room_area_join;
+            Protocol._resRoomAreaJoin.result = EnumResResult.SUCCESS;
+
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(Protocol._resRoomAreaJoin, Protocol._jsonSerializerOptions);
+
+
+            _client.Send(bytes);
+        }
+
+        public void ReqRoomAreaMessage(ReqRoomAreaMessage req)
+        {
+            Console.WriteLine(req.idRoom);
+
+            Protocol._resMessage.key = EnumKey.res_message;
+            Protocol._resMessage.result = EnumResResult.SUCCESS;
+            Protocol._resMessage.message = req.message;
+
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(Protocol._resMessage, Protocol._jsonSerializerOptions);
+
+            _client.RoomSend(bytes, req.idRoom);
+        }
+
+        public void ReqMessage(ReqMessage req)
         {
             Console.WriteLine(req.message);
-            this.ResMessage(client);
+
+
+            Protocol._resMessage.key = EnumKey.res_message;
+            Protocol._resMessage.result = EnumResResult.SUCCESS;
+            Protocol._resMessage.message = "응답";
+
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(Protocol._resMessage, Protocol._jsonSerializerOptions);
+
+
+            _client.Send(bytes);
         }
 
-        private void ResMessage(Client client)
+        public void ResLeave(string idRoom)
         {
-            _resMessage.key = EnumKey.RES_MESSAGE;
-            _resMessage.message = "응답";
+            Protocol._resMessage.key = EnumKey.res_message;
+            Protocol._resMessage.result = EnumResResult.SUCCESS;
+            Protocol._resMessage.message = _dataClient.nick + "가 나감";
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(_resMessage, _jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(Protocol._resMessage, Protocol._jsonSerializerOptions);
 
 
-            client.Send(bytes);
+            _client.RoomSend0(bytes, idRoom);
         }
+
+        public void ResDisconnect(string idRoom)
+        {
+            Protocol._resMessage.key = EnumKey.res_message;
+            Protocol._resMessage.result = EnumResResult.SUCCESS;
+            Protocol._resMessage.message = _dataClient.nick + "가 끊김";
+
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(Protocol._resMessage, Protocol._jsonSerializerOptions);
+
+
+            _client.RoomSend0(bytes,idRoom);
+        }
+
     }
 
     class Client : BaseClient
     {
         private readonly List<string> _listRoomId = new List<string>();
-        private readonly OnReceiveFn _onReceiveFn = new OnReceiveFn();
+        private readonly OnReceiveFn _onReceiveFn;
 
         public Client(Socket socket) : base(socket)
         {
-            
+            _onReceiveFn = new OnReceiveFn(this);
         }
         protected override void OnReceive(byte[] bytes, int size)
         {
@@ -54,15 +126,27 @@ namespace ServerCShop0
 
             switch (basePacket.key)
             {
-                case EnumKey.REQ_MESSAGE:
+                case EnumKey.req_login:
                     {
-                        _onReceiveFn.ReqMessage(this, JsonSerializer.Deserialize<ReqMessage>(readOnlySpan));
+                        _onReceiveFn.ReqLogin(JsonSerializer.Deserialize<ReqLogin>(readOnlySpan));
+                        break;
+                    }
+                case EnumKey.req_room_area_join:
+                    {
+                        _onReceiveFn.ReqRoomAreaJoin(JsonSerializer.Deserialize<ReqRoomAreaJoin>(readOnlySpan));
+                        break;
+                    }
+                case EnumKey.req_room_area_message:
+                    {
+                        _onReceiveFn.ReqRoomAreaMessage(JsonSerializer.Deserialize<ReqRoomAreaMessage>(readOnlySpan));
+                        break;
+                    }
+                case EnumKey.req_message:
+                    {
+                        _onReceiveFn.ReqMessage(JsonSerializer.Deserialize<ReqMessage>(readOnlySpan));
                         break;
                     }
             }
-
-
-
         }
 
   
@@ -72,6 +156,18 @@ namespace ServerCShop0
             _listRoomId.Add(idRoom);
         }
         public void Leave(string idRoom = null)
+        {
+            this.Leave0(idRoom);
+            if (idRoom == null)
+            {
+                if (_listRoomId.Count > 0) idRoom = _listRoomId[0];
+                else return;
+            }
+
+            _onReceiveFn.ResLeave(idRoom);
+        }
+
+        private void Leave0(string idRoom = null)
         {
             if (idRoom == null)
             {
@@ -91,11 +187,22 @@ namespace ServerCShop0
             else Room.Send(idRoom, bytes);
         }
 
+        public void RoomSend0(byte[] bytes, string idRoom = null) //본인제외
+        {
+            if (idRoom == null)
+            {
+                if (_listRoomId.Count > 0) Room.Send(_listRoomId[0], bytes);
+            }
+            else Room.Send(idRoom, bytes, this);
+        }
+
         protected override void Disconnect()
         {
-            foreach (string roomId in _listRoomId)
+            _onReceiveFn.ResDisconnect(_listRoomId[_listRoomId.Count-1]);
+            string[] listRoomId = _listRoomId.ToArray();
+            foreach (string roomId in listRoomId)
             {
-                this.Leave(roomId);
+                this.Leave0(roomId);
             }
 
             if(_socket != null)
@@ -119,7 +226,8 @@ namespace ServerCShop0
 
         public static void Join(Client client, string idRoom)
         {
-            if (_listRoom[idRoom] == null)
+           // if (_listRoom[idRoom] == null)
+            if(!_listRoom.ContainsKey(idRoom))
             {
                 _listRoom[idRoom] = new Room();
             }
@@ -129,7 +237,8 @@ namespace ServerCShop0
 
         public static void Leave(Client client, string idRoom)
         {
-            if (_listRoom[idRoom] == null)
+            // if (_listRoom[idRoom] == null)
+            if (!_listRoom.ContainsKey(idRoom))
             {
                 return;
             }

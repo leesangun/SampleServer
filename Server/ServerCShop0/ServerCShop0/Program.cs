@@ -19,6 +19,9 @@ namespace ServerCShop0
             base.Bind(new IPEndPoint(IPAddress.Any, 4000));
             base.Listen(0);
             BeginAccept(Accept, this);
+
+            Protocol protocol = new Protocol();
+            protocol.SetData();
         }
 
         private void Accept(IAsyncResult result)
