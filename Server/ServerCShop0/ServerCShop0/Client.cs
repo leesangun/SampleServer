@@ -117,12 +117,8 @@ namespace ServerCShop0
         }
         protected override void OnReceive(byte[] bytes, int size)
         {
-
-            byte[] bs = new byte[size];
-            Array.Copy(bytes, bs, bs.Length);
-            var readOnlySpan = new ReadOnlySpan<byte>(bs);
+            var readOnlySpan = new ReadOnlySpan<byte>(bytes, 0, size);
             BasePacket basePacket = JsonSerializer.Deserialize<BasePacket>(readOnlySpan);
-            
 
             switch (basePacket.key)
             {
