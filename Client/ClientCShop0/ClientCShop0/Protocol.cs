@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClientCShop0
+﻿namespace Protocol
 {
     public enum EnumKey : ushort
     {
-        req_login = 0,
-        res_login = 1,
-        req_room_area_join = 2,
-        res_room_area_join = 3,
-        req_room_area_message = 4,
-        req_message = 10,
-        res_message = 11,
+        reqLogin = 0,
+        resLogin = 1,
+        reqRoomAreaJoin = 2,
+        resRoomAreaJoin = 3,
+        reqRoomAreaMessage = 4,
+        reqMessage = 10,
+        resMessage = 11,
     }
     public enum EnumResResult : byte
     {
@@ -72,9 +65,5 @@ namespace ClientCShop0
     public class ResMessage : BasePacketRes
     {
         public string message { get; set; }
-    }
-
-    class Protocol
-    {
     }
 }

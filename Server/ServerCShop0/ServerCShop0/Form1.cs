@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Protocol;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,7 +23,7 @@ namespace ServerCShop0
         {
             ResMessage r = new ResMessage
             {
-                key = EnumKey.res_message,
+                key = EnumKey.resMessage,
                 message = "전체응답"
             };
             var options = new JsonSerializerOptions

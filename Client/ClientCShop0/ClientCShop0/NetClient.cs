@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 //Install-Package System.Text.Json -Version 4.7.1
+
+using Protocol;
+
 namespace ClientCShop0
 {
     class NetClient
@@ -37,19 +40,19 @@ namespace ClientCShop0
                     BasePacket basePacket = JsonSerializer.Deserialize<BasePacket>(readOnlySpan);
                     switch (basePacket.key)
                     {
-                        case EnumKey.res_login:
+                        case EnumKey.resLogin:
                             {
                                 this.ResLogin(JsonSerializer.Deserialize<ResLogin>(readOnlySpan));
 
                                 break;
                             }
-                        case EnumKey.res_room_area_join:
+                        case EnumKey.resRoomAreaJoin:
                             {
                                 this.ResRoomAreaJoin(JsonSerializer.Deserialize<ResRoomAreaJoin>(readOnlySpan));
 
                                 break;
                             }
-                        case EnumKey.res_message:
+                        case EnumKey.resMessage:
                             {
                                 this.ResMessage(JsonSerializer.Deserialize<ResMessage>(readOnlySpan));
 
@@ -64,7 +67,7 @@ namespace ClientCShop0
         public void ReqLogin(string nick)
         {
             ReqLogin req = new ReqLogin();
-            req.key = EnumKey.req_login;
+            req.key = EnumKey.reqLogin;
             req.nick = nick;
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(req, _jsonSerializerOptions);
             _clientTCP.write(bytes);
@@ -87,7 +90,7 @@ namespace ClientCShop0
         public void ReqRoomAreaJoin(string idRoom)
         {
             ReqRoomAreaJoin req = new ReqRoomAreaJoin();
-            req.key = EnumKey.req_room_area_join;
+            req.key = EnumKey.reqRoomAreaJoin;
             req.idRoom = idRoom;
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(req, _jsonSerializerOptions);
             _clientTCP.write(bytes);
@@ -114,7 +117,7 @@ namespace ClientCShop0
             }
 
             ReqRoomAreaMessage req = new ReqRoomAreaMessage();
-            req.key = EnumKey.req_room_area_message;
+            req.key = EnumKey.reqRoomAreaMessage;
             req.idRoom = _dataClient.idRoomArea;
             req.message = message;
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(req, _jsonSerializerOptions);
@@ -125,7 +128,7 @@ namespace ClientCShop0
         public void ReqMessage()
         {
             ReqMessage req = new ReqMessage();
-            req.key = EnumKey.req_message;
+            req.key = EnumKey.reqMessage;
             req.message = "한글";
 
 

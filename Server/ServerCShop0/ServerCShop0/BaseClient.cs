@@ -10,20 +10,30 @@ namespace ServerCShop0
 {
     abstract class BaseClient
     {
-        protected readonly Socket _socket;
+        protected Socket _socket;
         private readonly byte[] _bytes = new byte[1024];
 
-
-        public BaseClient(Socket socket)
+        public delegate void DelegateDisconnect();
+        private DelegateDisconnect _delegateDisconnect;
+        public BaseClient()
         {
-  
+
+        }
+        public void Init(Socket socket, DelegateDisconnect delegateDisconnect=null)
+        {
             this._socket = socket;
+            _delegateDisconnect = delegateDisconnect;
             if (_socket.Connected)
             {
                 this._socket.BeginReceive(_bytes, 0, _bytes.Length, SocketFlags.None, Receive, this);
                 var remoteAddr = (IPEndPoint)socket.RemoteEndPoint;
                 Console.WriteLine($"Client:(From:{remoteAddr.Address.ToString()}:{remoteAddr.Port},Connection time:{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")})");
             }
+        }
+
+        public BaseClient(Socket socket)
+        {
+            this.Init(socket); 
         }
 
         private void Receive(IAsyncResult result)
@@ -67,7 +77,22 @@ namespace ServerCShop0
             }
         }
 
-        protected abstract void Disconnect();
+        protected virtual void Disconnect()
+        {
+            if (_socket != null)
+            {
+                // Release the socket.
+                _socket.Shutdown(SocketShutdown.Both);
+
+                _socket.Disconnect(true);
+                if (_socket.Connected)
+                    Console.WriteLine("We're still connnected");
+                else
+                    Console.WriteLine("We're disconnected");
+
+                _delegateDisconnect();
+            }
+        }
         protected abstract void OnReceive(byte[] bytes,int size);
     }
 }
