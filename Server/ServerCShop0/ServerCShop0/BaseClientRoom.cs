@@ -17,7 +17,11 @@ namespace ServerCShop0
         public virtual void Join(string idRoom)
         {
             Room.Join(this, idRoom);
-            _listRoomId.Add(idRoom);
+            if (!_listRoomId.Contains(idRoom))
+            {
+                _listRoomId.Add(idRoom);
+            }
+            
         }
         public virtual void Leave(string idRoom = null)
         {
@@ -72,7 +76,10 @@ namespace ServerCShop0
             {
                 _listRoom[idRoom] = new Room();
             }
-            _listRoom[idRoom]._listClient.Add(client);
+            if (!_listRoom[idRoom]._listClient.Contains(client))
+            {
+                _listRoom[idRoom]._listClient.Add(client);
+            }
         }
 
 

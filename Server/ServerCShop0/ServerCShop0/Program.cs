@@ -1,5 +1,6 @@
 ﻿using Lib;
 using Protocol;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,7 @@ namespace ServerCShop0
 {
     class ProtocolObject
     {
-        public static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
-        {
-            WriteIndented = true
-        };
+        
         public static ResLogin _resLogin = new ResLogin();
         public static ResRoomAreaJoin _resRoomAreaJoin = new ResRoomAreaJoin();
         public static ResMessage _resMessage = new ResMessage();
@@ -84,6 +82,10 @@ namespace ServerCShop0
         public static void ThreadServer()
         {
             _server = new Server();
+
+            //RedisStackExchange.TestReset();
+            //RedisStackExchange.Test();
+            //LibMySql.Test();
         }
 
         /// <summary>

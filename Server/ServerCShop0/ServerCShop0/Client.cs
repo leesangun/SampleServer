@@ -1,4 +1,5 @@
-﻿using Protocol;
+﻿using Lib;
+using Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace ServerCShop0
             ProtocolObject._resLogin.key = EnumKey.resLogin;
             ProtocolObject._resLogin.result = EnumResResult.SUCCESS;
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resLogin, ProtocolObject._jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resLogin, Config._jsonSerializerOptions);
 
 
             _client.Send(bytes);
@@ -47,7 +48,7 @@ namespace ServerCShop0
             ProtocolObject._resRoomAreaJoin.key = EnumKey.resRoomAreaJoin;
             ProtocolObject._resRoomAreaJoin.result = EnumResResult.SUCCESS;
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resRoomAreaJoin, ProtocolObject._jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resRoomAreaJoin, Config._jsonSerializerOptions);
 
 
             _client.Send(bytes);
@@ -61,7 +62,7 @@ namespace ServerCShop0
             ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
             ProtocolObject._resMessage.message = req.message;
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, ProtocolObject._jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
 
             _client.RoomSend(bytes, req.idRoom);
         }
@@ -75,7 +76,7 @@ namespace ServerCShop0
             ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
             ProtocolObject._resMessage.message = "응답";
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, ProtocolObject._jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
 
 
             _client.Send(bytes);
@@ -87,7 +88,7 @@ namespace ServerCShop0
             ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
             ProtocolObject._resMessage.message = _dataClient.nick + "가 나감";
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, ProtocolObject._jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
 
 
             _client.RoomSend0(bytes, idRoom);
@@ -99,7 +100,7 @@ namespace ServerCShop0
             ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
             ProtocolObject._resMessage.message = _dataClient.nick + "가 끊김";
 
-            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, ProtocolObject._jsonSerializerOptions);
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
 
 
             _client.RoomSend0(bytes,idRoom);
