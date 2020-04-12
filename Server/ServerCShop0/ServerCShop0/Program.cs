@@ -15,7 +15,7 @@ namespace ServerCShop0
 {
     class ProtocolObject
     {
-        
+        //비동기서버이기 때문에 이방식은 테스트 필요
         public static ResLogin _resLogin = new ResLogin();
         public static ResRoomAreaJoin _resRoomAreaJoin = new ResRoomAreaJoin();
         public static ResMessage _resMessage = new ResMessage();
@@ -83,9 +83,11 @@ namespace ServerCShop0
         {
             _server = new Server();
 
-            //RedisStackExchange.TestReset();
-            //RedisStackExchange.Test();
+            //RedisRedis.TestReset();
+            //RedisRedis.Test();
             //LibMySql.Test();
+            LibLog.Test();
+            //ConnRedis.Test();
         }
 
         /// <summary>
@@ -94,9 +96,9 @@ namespace ServerCShop0
         [STAThread]
         static void Main()
         {
-            Thread t = new Thread(new ThreadStart(ThreadServer));
-            t.Start();
-            t.Join();
+            Thread threadServer = new Thread(new ThreadStart(ThreadServer));
+            threadServer.Start();
+            threadServer.Join();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

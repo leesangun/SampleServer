@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 //Install-Package System.Text.Json -Version 4.7.1
 //NuGet StackExchange.Redis
 //NuGet MySql.Data
+//NuGet log4net
 
 namespace Lib
 {
@@ -33,5 +34,7 @@ namespace Lib
                 "ghtmxld1",        //pw
                 "lsu3"              //db
         );
+
+        public static readonly double SEC_USER_SESSION = 60;
     }
 }
