@@ -37,7 +37,17 @@ namespace ClientCShop0
                 (byte[] bytes) =>
                 {
                     var readOnlySpan = new ReadOnlySpan<byte>(bytes);
-                    BasePacket basePacket = JsonSerializer.Deserialize<BasePacket>(readOnlySpan);
+                    BasePacket basePacket;
+                    try
+                    {
+                        basePacket = JsonSerializer.Deserialize<BasePacket>(readOnlySpan);
+                    }
+                    catch(JsonException e)
+                    {
+                        Console.WriteLine(Encoding.UTF8.GetString(bytes));
+                        return;
+                    }
+                    
                     switch (basePacket.key)
                     {
                         case EnumKey.resLogin:
