@@ -67,9 +67,9 @@ public class Server  implements Runnable{
 		//여기서 클라이언트객체 생성
 		
 		StringBuffer sb = new StringBuffer();
-		socketChannel.register(selector, SelectionKey.OP_READ,sb);	//읽기 모드로 등록
-		//sb.append("Welcome server!\r\n>");
-		//socketChannel.register(selector, SelectionKey.OP_WRITE, sb);
+		//socketChannel.register(selector, SelectionKey.OP_READ,sb);	//읽기 모드로 등록
+		sb.append("Welcome server!\r\n>");
+		socketChannel.register(selector, SelectionKey.OP_WRITE, sb);
 		
 		System.out.format("Accepted: %s%n",socketChannel.socket().getRemoteSocketAddress().toString());
 	}
