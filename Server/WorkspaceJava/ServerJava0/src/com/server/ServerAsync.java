@@ -12,76 +12,59 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerAsync {
-
 	private static int PORT = 4000;
 	private static int threadPoolSize = 8; 
 	private static int initialSize = 4;
 	private static int backlog = 50; 
 
-	public ServerAsync()
-	{
+	public ServerAsync(){
 		ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize); 
 
-		try
-		{
+		try{
 			AsynchronousChannelGroup group = AsynchronousChannelGroup.withCachedThreadPool(executor, initialSize);
 			//AsynchronousChannelGroup group = AsynchronousChannelGroup.withFixedThreadPool(1, Executors.defaultThreadFactory());
-			AsynchronousServerSocketChannel listener = AsynchronousServerSocketChannel.open(group);
-			listener.bind(new InetSocketAddress(PORT), backlog);
-			listener.accept(listener, new Dispatcher());
-		}
-		catch (IOException e)
-		{
+			AsynchronousServerSocketChannel serverSocketChannel = AsynchronousServerSocketChannel.open(group);
+			serverSocketChannel.bind(new InetSocketAddress(PORT), backlog);
+			serverSocketChannel.accept(serverSocketChannel, new Dispatcher());
+		}catch (IOException e){
 			e.printStackTrace();
 		}
 	}
 }
 
-class Dispatcher implements CompletionHandler<AsynchronousSocketChannel, AsynchronousServerSocketChannel>
-{
-	private int DATA_SIZE = 1024;
+class Dispatcher implements CompletionHandler<AsynchronousSocketChannel, AsynchronousServerSocketChannel>{
+	private static final int DATA_SIZE = 1024;
 
 	@Override
-	public void completed(AsynchronousSocketChannel channel, AsynchronousServerSocketChannel listener) 
-	{
+	public void completed(AsynchronousSocketChannel channel, AsynchronousServerSocketChannel serverSocketChannel) {
 		System.out.println("connect");
-		listener.accept(listener, this);
+		serverSocketChannel.accept(serverSocketChannel, this);
 		ByteBuffer buffer = ByteBuffer.allocate(DATA_SIZE);
 		channel.read(buffer, buffer, new EchoHandler(channel));
 	}
 
 	@Override
-	public void failed(Throwable exc, AsynchronousServerSocketChannel listener) 
-	{
+	public void failed(Throwable exc, AsynchronousServerSocketChannel listener) {
 		System.out.println("dddd");
 	}
 }
 
-class EchoHandler implements CompletionHandler<Integer, ByteBuffer>
-{
+class EchoHandler implements CompletionHandler<Integer, ByteBuffer>{
 	private AsynchronousSocketChannel channel;
-	public EchoHandler(AsynchronousSocketChannel channel)
-	{
+	public EchoHandler(AsynchronousSocketChannel channel){
 		this.channel = channel;
 	}
 
 	@Override
-	public void completed(Integer result, ByteBuffer buffer)
-	{
-		if (result == -1)
-		{
+	public void completed(Integer result, ByteBuffer buffer){
+		if (result == -1){
 			System.out.println("close");
-			try
-			{
+			try{
 				channel.close(); 
-			}
-			catch (IOException e)
-			{
+			}catch (IOException e){
 				e.printStackTrace();
 			}
-		}
-		else if (result > 0)
-		{
+		}else if (result > 0){
 			buffer.flip();
 			String msg = new String(buffer.array());
 			System.out.println("echo: " + msg);
@@ -98,6 +81,10 @@ class EchoHandler implements CompletionHandler<Integer, ByteBuffer>
 	@Override
 	public void failed(Throwable exc, ByteBuffer attachment) {
 		System.out.println("disconnect");
+		try{
+			channel.close(); 
+		}catch (IOException e){
+			e.printStackTrace();
+		}
 	}
-
 }
