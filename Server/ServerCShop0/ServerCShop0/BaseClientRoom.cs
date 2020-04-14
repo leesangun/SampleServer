@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Lib;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 
@@ -67,14 +68,18 @@ namespace ServerCShop0
     class Room
     {
         private static readonly Dictionary<string, Room> _listRoom = new Dictionary<string, Room>();
+        private static readonly ObjectPool<Room> _poolRoom = new ObjectPool<Room>(() => new Room());
+
         private readonly List<BaseClientRoom> _listClient = new List<BaseClientRoom>();
+
 
         public static void Join(BaseClientRoom client, string idRoom)
         {
             // if (_listRoom[idRoom] == null)
             if (!_listRoom.ContainsKey(idRoom))
             {
-                _listRoom[idRoom] = new Room();
+                //_listRoom[idRoom] = new Room();
+                _listRoom[idRoom] = _poolRoom.GetObject();
             }
             if (!_listRoom[idRoom]._listClient.Contains(client))
             {
@@ -93,6 +98,7 @@ namespace ServerCShop0
             _listRoom[idRoom]._listClient.Remove(client);
             if (Room.CountSocket(idRoom) == 0)
             {
+                _poolRoom.PutObject(_listRoom[idRoom]);
                 _listRoom.Remove(idRoom);
             }
         }
