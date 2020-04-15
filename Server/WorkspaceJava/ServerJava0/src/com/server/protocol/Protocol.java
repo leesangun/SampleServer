@@ -11,12 +11,23 @@ public class Protocol {
         reqMessage(10),
         resMessage(11);
         
-        final private int name; 
-        private EnumKey(int name) { 
-        	this.name = name; 
+        private final int _value; 
+        private EnumKey(int value) { 
+        	this._value = value; 
         } 
-        public int getName() {
-        	return name; 
+        public int getValue() {
+        	return _value; 
+        }
+        
+        public static EnumKey valueToEnum(int value)
+        {
+        	EnumKey[] e = EnumKey.values();
+            for(int i = 0; i < e.length; i++)
+            {
+                if(e[i].getValue() == value)
+                    return e[i];
+            }
+            return null;
         }
     }
 	

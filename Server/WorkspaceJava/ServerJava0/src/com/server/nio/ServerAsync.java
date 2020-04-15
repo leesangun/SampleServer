@@ -1,4 +1,4 @@
-package com.server;
+package com.server.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -7,9 +7,9 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 public class ServerAsync {
 	private static int PORT = 4000;
@@ -30,6 +30,8 @@ public class ServerAsync {
 			e.printStackTrace();
 		}
 	}
+	
+	
 }
 
 class Dispatcher implements CompletionHandler<AsynchronousSocketChannel, AsynchronousServerSocketChannel>{
@@ -37,22 +39,34 @@ class Dispatcher implements CompletionHandler<AsynchronousSocketChannel, Asynchr
 
 	@Override
 	public void completed(AsynchronousSocketChannel channel, AsynchronousServerSocketChannel serverSocketChannel) {
-		System.out.println("connect");
+		//BaseClient client = new Client(channel);
+		BaseClient client = null;
+		try {
+			client = Client._poolClient.borrowObject();
+			client.init(channel);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		
 		serverSocketChannel.accept(serverSocketChannel, this);
 		ByteBuffer buffer = ByteBuffer.allocate(DATA_SIZE);
-		channel.read(buffer, buffer, new EchoHandler(channel));
+		//channel.read(buffer, buffer, new EchoHandler(channel));
+		channel.read(buffer, buffer, client);
 	}
 
 	@Override
 	public void failed(Throwable exc, AsynchronousServerSocketChannel listener) {
 		System.out.println("dddd");
 	}
+	
+	
 }
-
-class EchoHandler implements CompletionHandler<Integer, ByteBuffer>{
-	private AsynchronousSocketChannel channel;
+/*
+class EchoHandler implements CompletionHandler<Integer, ByteBuffer>{	
+	private AsynchronousSocketChannel _channel;
 	public EchoHandler(AsynchronousSocketChannel channel){
-		this.channel = channel;
+		this._channel = channel;
 	}
 
 	@Override
@@ -60,31 +74,35 @@ class EchoHandler implements CompletionHandler<Integer, ByteBuffer>{
 		if (result == -1){
 			System.out.println("close");
 			try{
-				channel.close(); 
+				_channel.close(); 
 			}catch (IOException e){
 				e.printStackTrace();
 			}
 		}else if (result > 0){
 			buffer.flip();
+			
+			
 			String msg = new String(buffer.array());
 			System.out.println("echo: " + msg);
 			
 			Charset charset = Charset.forName("UTF-8");
 			String data = "네이버 블로그는 부르곰";
 			ByteBuffer byteBuffer = charset.encode(data);
-			channel.write(byteBuffer);
+			_channel.write(byteBuffer);
 			
-			channel.read(buffer, buffer, this);
+			_channel.read(buffer, buffer, this);
 		}
 	}
 
 	@Override
 	public void failed(Throwable exc, ByteBuffer attachment) {
-		System.out.println("disconnect");
+		System.out.println("disconnects");
 		try{
-			channel.close(); 
+			_channel.close(); 
 		}catch (IOException e){
 			e.printStackTrace();
 		}
 	}
+	
 }
+*/

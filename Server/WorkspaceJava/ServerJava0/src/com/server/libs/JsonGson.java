@@ -31,5 +31,6 @@ public class JsonGson implements BaseJsonSerializer {
 			return null;
 		}
 	}
+	
 
 }
