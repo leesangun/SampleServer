@@ -1,12 +1,12 @@
 # SampleServer
 
 - C# 
-  IOCP
+  Windows : IOCP
 
 - Java NIO
-  Windows : select
-  Mac OS : Kqueue
-  Linux kernel 2.6+ : epoll
+  Windows : select,
+  Mac OS : Kqueue,
+  Linux kernel 2.6+ : epoll,
   Solaris : poll
   
  
