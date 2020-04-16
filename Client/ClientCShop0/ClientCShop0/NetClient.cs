@@ -86,7 +86,7 @@ namespace ClientCShop0
         {
             switch (res.result)
             {
-                case EnumResResult.SUCCESS:
+                case EnumResResult.success:
                     {
                         foreach(RecordRoomArea record in res.recordRoomAreas)
                         {
@@ -111,7 +111,7 @@ namespace ClientCShop0
         {
             switch (res.result)
             {
-                case EnumResResult.SUCCESS:
+                case EnumResResult.success:
                     {
                         _form1.Log("ResRoomAreaJoin");
                         break;
@@ -151,7 +151,7 @@ namespace ClientCShop0
         {
             switch (res.result)
             {
-                case EnumResResult.SUCCESS:
+                case EnumResResult.success:
                     {
                         _form1.Log(res.message);
                         Console.WriteLine(res.message);
