@@ -31,7 +31,7 @@ namespace ServerCShop0
             _dataClient.nick = req.nick;
 
             ProtocolObject._resLogin.key = EnumKey.resLogin;
-            ProtocolObject._resLogin.result = EnumResResult.SUCCESS;
+            ProtocolObject._resLogin.result = EnumResResult.success;
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resLogin, Config._jsonSerializerOptions);
 
@@ -46,7 +46,7 @@ namespace ServerCShop0
             _client.Join(req.idRoom);
 
             ProtocolObject._resRoomAreaJoin.key = EnumKey.resRoomAreaJoin;
-            ProtocolObject._resRoomAreaJoin.result = EnumResResult.SUCCESS;
+            ProtocolObject._resRoomAreaJoin.result = EnumResResult.success;
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resRoomAreaJoin, Config._jsonSerializerOptions);
 
@@ -59,7 +59,7 @@ namespace ServerCShop0
             Console.WriteLine(req.idRoom);
 
             ProtocolObject._resMessage.key = EnumKey.resMessage;
-            ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
+            ProtocolObject._resMessage.result = EnumResResult.success;
             ProtocolObject._resMessage.message = req.message;
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
@@ -73,7 +73,7 @@ namespace ServerCShop0
 
 
             ProtocolObject._resMessage.key = EnumKey.resMessage;
-            ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
+            ProtocolObject._resMessage.result = EnumResResult.success;
             ProtocolObject._resMessage.message = "응답";
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
@@ -85,7 +85,7 @@ namespace ServerCShop0
         public void ResLeave(string idRoom)
         {
             ProtocolObject._resMessage.key = EnumKey.resMessage;
-            ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
+            ProtocolObject._resMessage.result = EnumResResult.success;
             ProtocolObject._resMessage.message = _dataClient.nick + "가 나감";
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
@@ -97,7 +97,7 @@ namespace ServerCShop0
         public void ResDisconnect(string idRoom)
         {
             ProtocolObject._resMessage.key = EnumKey.resMessage;
-            ProtocolObject._resMessage.result = EnumResResult.SUCCESS;
+            ProtocolObject._resMessage.result = EnumResResult.success;
             ProtocolObject._resMessage.message = _dataClient.nick + "가 끊김";
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
@@ -123,6 +123,9 @@ namespace ServerCShop0
         }
         protected override void OnReceive(byte[] bytes, int size)
         {
+         //   Console.WriteLine(System.Text.Encoding.UTF8.GetString(bytes));
+
+
             var readOnlySpan = new ReadOnlySpan<byte>(bytes, 0, size);
             BasePacket basePacket = JsonSerializer.Deserialize<BasePacket>(readOnlySpan);
 

@@ -12,7 +12,7 @@
     }
     public enum EnumResResult : byte
     {
-        SUCCESS = 0,
+        success = 0,
     }
 
     public class BasePacket

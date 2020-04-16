@@ -1,6 +1,7 @@
 package com.server.protocol;
 
 public class Protocol {
+	/*
 	public enum EnumKey
     {
         reqLogin(0),
@@ -45,7 +46,23 @@ public class Protocol {
         	return name; 
         }
     }
-
+	*/
     
+    public class EnumKey
+    {
+        public static final int 
+        reqLogin = 0,
+        resLogin = 1,
+        reqRoomAreaJoin = 2,
+        resRoomAreaJoin = 3,
+        reqRoomAreaMessage = 4,
+        reqMessage = 10,
+        resMessage = 11;
+    }
+    public class EnumResResult
+    {
+    	public static final int 
+    	success = 0;
+    }
 }
 

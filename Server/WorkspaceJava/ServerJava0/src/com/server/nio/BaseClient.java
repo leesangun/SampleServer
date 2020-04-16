@@ -7,7 +7,7 @@ import java.nio.channels.CompletionHandler;
 
 public abstract class BaseClient implements CompletionHandler<Integer, ByteBuffer>{	
 	private AsynchronousSocketChannel _channel;
-	
+	private int _limitMax;
 
 	public void init(AsynchronousSocketChannel channel) {
 		this._channel = channel;
@@ -27,10 +27,15 @@ public abstract class BaseClient implements CompletionHandler<Integer, ByteBuffe
 				e.printStackTrace();
 			}
 		}else if (result > 0){
-			buffer.flip();
+			//----- flip 관련 이 부분 수정 필요
+			//buffer.flip();
+			buffer.clear();
+			if(result > _limitMax)_limitMax = result;
+			byte[] bb = buffer.array();
+			for (int i=result;i<_limitMax;i++) bb[i] = 0;
+			//----------
 			
 			this.read(buffer);
-			
 //			String msg = new String(buffer.array());
 //			System.out.println("echo: " + msg);
 //			
@@ -39,6 +44,9 @@ public abstract class BaseClient implements CompletionHandler<Integer, ByteBuffe
 //			ByteBuffer byteBuffer = charset.encode(data);
 //			_channel.write(byteBuffer);
 			
+			//buffer = ByteBuffer.allocate(1024);
+			
+
 			_channel.read(buffer, buffer, this);
 		}
 	}
@@ -52,11 +60,28 @@ public abstract class BaseClient implements CompletionHandler<Integer, ByteBuffe
 			e.printStackTrace();
 		}
 	}
-	
+/*	
+	CompletionHandler<Integer, ByteBuffer> _write = new CompletionHandler<Integer, ByteBuffer>() {
+		@Override
+		public void completed(Integer result, ByteBuffer attachment) {
+			System.out.println("1111");
+		}
+
+		@Override
+		public void failed(Throwable exc, ByteBuffer attachment) {
+			System.out.println("222");
+		}
+	};
+	*/
 	public void write(ByteBuffer buffer) {
+		//_channel.write(buffer,buffer,_write);
 		_channel.write(buffer);
 	}
 	
 	protected abstract void disconnect();
 	protected abstract void read(ByteBuffer buffer);
 }
+
+
+
+

@@ -126,7 +126,7 @@
     <Compile Include="BaseClientRoom.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="ConnMySql.cs" />
+    <Compile Include="ConnDB.cs" />
     <Compile Include="LibLog.cs" />
     <Compile Include="LibMySql.cs" />
     <Compile Include="Form1.cs">

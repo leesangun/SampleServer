@@ -8,7 +8,7 @@ public class ProtocolObject {
 
     public static ResRoomAreaList _resRoomAreaList = new ResRoomAreaList();
 
-    public void SetData()
+    public static void setData()
     {
         _resRoomAreaList.recordRoomAreas = new RecordRoomArea[3];
         for (int i = 0; i < _resRoomAreaList.recordRoomAreas.length; i++)

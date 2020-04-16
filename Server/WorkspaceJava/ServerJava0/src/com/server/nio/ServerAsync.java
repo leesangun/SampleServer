@@ -10,6 +10,8 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.server.protocol.ProtocolObject;
+
 
 public class ServerAsync {
 	private static int PORT = 4000;
@@ -18,6 +20,8 @@ public class ServerAsync {
 	private static int backlog = 50; 
 
 	public ServerAsync(){
+		ProtocolObject.setData();
+		
 		ExecutorService executor = Executors.newFixedThreadPool(threadPoolSize); 
 
 		try{
@@ -31,7 +35,11 @@ public class ServerAsync {
 		}
 	}
 	
-	
+	public static void writeAll(ByteBuffer buffer) {
+		for(Client c : Client._listClient) {
+			c.write(buffer);
+		}
+	}
 }
 
 class Dispatcher implements CompletionHandler<AsynchronousSocketChannel, AsynchronousServerSocketChannel>{
@@ -53,6 +61,7 @@ class Dispatcher implements CompletionHandler<AsynchronousSocketChannel, Asynchr
 		ByteBuffer buffer = ByteBuffer.allocate(DATA_SIZE);
 		//channel.read(buffer, buffer, new EchoHandler(channel));
 		channel.read(buffer, buffer, client);
+		
 	}
 
 	@Override
@@ -86,7 +95,7 @@ class EchoHandler implements CompletionHandler<Integer, ByteBuffer>{
 			System.out.println("echo: " + msg);
 			
 			Charset charset = Charset.forName("UTF-8");
-			String data = "³×ÀÌ¹ö ºí·Î±×´Â ºÎ¸£°õ";
+			String data = "ë„¤ì´ë²„ ë¸”ë¡œê·¸ëŠ” ë¶€ë¥´ê³°";
 			ByteBuffer byteBuffer = charset.encode(data);
 			_channel.write(byteBuffer);
 			

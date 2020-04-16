@@ -103,9 +103,6 @@ public class Server  implements Runnable{
 			System.out.println(e.toString());
 			this.disconnect(key);
 		}
-
-		
-
 	}
 
 	private void write(Selector selector, SelectionKey key) {

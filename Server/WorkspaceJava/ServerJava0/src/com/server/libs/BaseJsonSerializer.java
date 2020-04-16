@@ -36,7 +36,7 @@ public interface BaseJsonSerializer {
 	public static void test() {
 		ResMessage res = new ResMessage();
 		res.key = Protocol.EnumKey.reqMessage;
-		res.result = Protocol.EnumResResult.SUCCESS;
+		res.result = Protocol.EnumResResult.success;
 		res.message = "1111";
 		
 		BaseJsonSerializer json = new JsonGson();

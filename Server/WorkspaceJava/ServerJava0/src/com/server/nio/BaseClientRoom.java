@@ -2,12 +2,8 @@ package com.server.nio;
 
 import java.nio.ByteBuffer;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
-import org.apache.commons.pool.impl.GenericObjectPool;
-
-import com.server.libs.ObjectPoolFactory;
 
 public abstract class BaseClientRoom extends BaseClient {
 	protected final Set<String> _listRoomId = new HashSet<String>();

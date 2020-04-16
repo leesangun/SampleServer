@@ -144,7 +144,7 @@ namespace Lib
             Console.WriteLine(r.StringGetString("key00"));
 
             ServerCShop0.ProtocolObject._resMessage.key = Protocol.EnumKey.resMessage;
-            ServerCShop0.ProtocolObject._resMessage.result = Protocol.EnumResResult.SUCCESS;
+            ServerCShop0.ProtocolObject._resMessage.result = Protocol.EnumResResult.success;
             ServerCShop0.ProtocolObject._resMessage.message = "응답111";
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ServerCShop0.ProtocolObject._resMessage, Config._jsonSerializerOptions);
             r.StringSet("key01", bytes);
@@ -155,7 +155,7 @@ namespace Lib
             Console.WriteLine(res.message);
 
             ServerCShop0.ProtocolObject._resMessage.key = Protocol.EnumKey.resMessage;
-            ServerCShop0.ProtocolObject._resMessage.result = Protocol.EnumResResult.SUCCESS;
+            ServerCShop0.ProtocolObject._resMessage.result = Protocol.EnumResResult.success;
             ServerCShop0.ProtocolObject._resMessage.message = "응답222";
             r.Set<Protocol.ResMessage>("key02", ServerCShop0.ProtocolObject._resMessage);
 
