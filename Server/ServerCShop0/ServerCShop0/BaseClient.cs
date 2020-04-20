@@ -15,6 +15,8 @@ namespace ServerCShop0
 
         public delegate void DelegateDisconnect();
         private DelegateDisconnect _delegateDisconnect;
+
+        
         public BaseClient()
         {
 
@@ -54,8 +56,6 @@ namespace ServerCShop0
                     this.Disconnect();
 
                 }
-
-
             }
         }
 
@@ -76,6 +76,7 @@ namespace ServerCShop0
                 this._socket.EndSend(result);
             }
         }
+        public abstract void SendUdp(byte[] bytes);
 
         protected virtual void Disconnect()
         {
@@ -94,5 +95,10 @@ namespace ServerCShop0
             }
         }
         protected abstract void OnReceive(byte[] bytes,int size);
+
+        public IPEndPoint GetRemote()
+        {
+            return (IPEndPoint)_socket.RemoteEndPoint;
+        }
     }
 }

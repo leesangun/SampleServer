@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientTCP.cs" />
+    <Compile Include="ClientUDP.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

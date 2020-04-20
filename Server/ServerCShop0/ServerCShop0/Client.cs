@@ -3,6 +3,7 @@ using Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 
 using System.Text.Json;
@@ -12,13 +13,15 @@ namespace ServerCShop0
 {
     class OnReceiveFn
     {
-        struct DataClient
+        public struct DataClient
         {
+            public IPEndPoint udpClientEndPoint;
             public string nick;
         }
-        private DataClient _dataClient = new DataClient();
+        public DataClient _dataClient = new DataClient();
 
         private Client _client;
+
         public OnReceiveFn(Client client)
         {
             _client = client;
@@ -28,6 +31,8 @@ namespace ServerCShop0
         public void ReqLogin(ReqLogin req)
         {
             Console.WriteLine(req.nick);
+            IPAddress address = _client.GetRemote().Address;
+            _dataClient.udpClientEndPoint = new IPEndPoint(address,req.udpClientPort);
             _dataClient.nick = req.nick;
 
             ProtocolObject._resLogin.key = EnumKey.resLogin;
@@ -37,6 +42,7 @@ namespace ServerCShop0
 
 
             _client.Send(bytes);
+            _client.SendUdp(bytes);
         }
 
         public void ReqRoomAreaJoin(ReqRoomAreaJoin req)
@@ -52,6 +58,7 @@ namespace ServerCShop0
 
 
             _client.Send(bytes);
+            _client.SendUdp(bytes);
         }
 
         public void ReqRoomAreaMessage(ReqRoomAreaMessage req)
@@ -65,6 +72,7 @@ namespace ServerCShop0
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
 
             _client.RoomSend(bytes, req.idRoom);
+            _client.RoomSendUdp(bytes, req.idRoom);
         }
 
         public void ReqMessage(ReqMessage req)
@@ -78,8 +86,8 @@ namespace ServerCShop0
 
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(ProtocolObject._resMessage, Config._jsonSerializerOptions);
 
-
             _client.Send(bytes);
+            _client.SendUdp(bytes);
         }
 
         public void ResLeave(string idRoom)
@@ -92,6 +100,7 @@ namespace ServerCShop0
 
 
             _client.RoomSend0(bytes, idRoom);
+            _client.RoomSend0Udp(bytes, idRoom);
         }
 
         public void ResDisconnect(string idRoom)
@@ -104,6 +113,7 @@ namespace ServerCShop0
 
 
             _client.RoomSend0(bytes,idRoom);
+            _client.RoomSend0Udp(bytes, idRoom);
         }
 
     }
@@ -112,7 +122,7 @@ namespace ServerCShop0
     {
         
         private readonly OnReceiveFn _onReceiveFn;
-
+        
         public Client() {
             _onReceiveFn = new OnReceiveFn(this);
         }
@@ -121,6 +131,9 @@ namespace ServerCShop0
         {
             _onReceiveFn = new OnReceiveFn(this);
         }
+
+        //udp는 ServerUdp 클래스에서
+
         protected override void OnReceive(byte[] bytes, int size)
         {
          //   Console.WriteLine(System.Text.Encoding.UTF8.GetString(bytes));
@@ -155,6 +168,7 @@ namespace ServerCShop0
         }
 
 
+
         public override void Leave(string idRoom = null)
         {
             base.Leave(idRoom);
@@ -169,6 +183,29 @@ namespace ServerCShop0
             }
 
             base.Disconnect();
+        }
+
+        public override void SendUdp(byte[] bytes)
+        {
+            Program._serverUdp.Send(_onReceiveFn._dataClient.udpClientEndPoint, bytes);
+        }
+
+        public void RoomSendUdp(byte[] bytes, string idRoom = null)
+        {
+            if (idRoom == null)
+            {
+                if (_listRoomId.Count > 0) Room.SendUdp(_listRoomId[0], bytes);
+            }
+            else Room.SendUdp(idRoom, bytes);
+        }
+
+        public void RoomSend0Udp(byte[] bytes, string idRoom = null) //본인제외
+        {
+            if (idRoom == null)
+            {
+                if (_listRoomId.Count > 0) Room.SendUdp(_listRoomId[0], bytes);
+            }
+            else Room.SendUdp(idRoom, bytes, this);
         }
     }
 

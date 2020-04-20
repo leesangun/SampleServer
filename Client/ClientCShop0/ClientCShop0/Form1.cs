@@ -12,7 +12,7 @@ namespace ClientCShop0
 {
     public partial class Form1 : Form
     {
-        private NetClient _netClient;
+        private readonly NetClient _netClient;
         public Form1()
         {
             InitializeComponent();
@@ -22,7 +22,7 @@ namespace ClientCShop0
             labelLog.Text = "Start";
         }
 
-        private int _countLog;
+        private int _countLog,_countLogUdp;
         public void Log(string message)
         {
             if (labelLog.InvokeRequired)
@@ -35,6 +35,21 @@ namespace ClientCShop0
             else
             {
                 labelLog.Text = (++_countLog) + ":" + message;
+            }
+        }
+
+        public void LogUdp(string message)
+        {
+            if (labelLogUdp.InvokeRequired)
+            {
+                labelLogUdp.Invoke(new MethodInvoker(delegate ()
+                {
+                    labelLogUdp.Text = (++_countLogUdp) + ":" + message;
+                }));
+            }
+            else
+            {
+                labelLogUdp.Text = (++_countLogUdp) + ":" + message;
             }
         }
 
@@ -63,6 +78,13 @@ namespace ClientCShop0
             _netClient.ReqRoomAreaMessage("메시지");
         }
 
+        
 
+        private void testUdp_Click(object sender, EventArgs e)
+        {
+            _netClient.TestUdpSend();
+            // clientUdp.Send();
+           // ClientUDP.Test();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace ClientCShop0
     class NetClient
     {
         private readonly ClientTCP _clientTCP;
+        private readonly ClientUDP _clientUdp;
 
         private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -72,11 +73,25 @@ namespace ClientCShop0
 
                 }
             );
+
+            _clientUdp = ClientUDP.GetInstance(
+                (byte[] bytes) => {
+                    string receiveString = Encoding.UTF8.GetString(bytes);
+                    Console.WriteLine(receiveString);
+                    _form1.LogUdp(receiveString);
+                }
+            );
+        }
+
+        public void TestUdpSend()
+        {
+            _clientUdp.Send();
         }
 
         public void ReqLogin(string nick)
         {
             ReqLogin req = new ReqLogin();
+            req.udpClientPort = _clientUdp.GetLocalPort();
             req.key = EnumKey.reqLogin;
             req.nick = nick;
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(req, _jsonSerializerOptions);

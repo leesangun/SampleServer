@@ -39,6 +39,7 @@ namespace ServerCShop0
         }
     }
 
+
     class Server : Socket
     {
         private readonly List<Client> _listClient = new List<Client>();
@@ -46,7 +47,7 @@ namespace ServerCShop0
 
         public Server() : base(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
         {
-            base.Bind(new IPEndPoint(IPAddress.Any, 4000));
+            base.Bind(new IPEndPoint(IPAddress.Any, Config.PORT_TCP));
             base.Listen(0);
             BeginAccept(Accept, this);
 
@@ -59,10 +60,14 @@ namespace ServerCShop0
             // var client = new Client(EndAccept(result));
 
             var client = _poolClient.GetObject();
-            client.Init(EndAccept(result), () => {
-                _listClient.Remove(client);
-                _poolClient.PutObject(client);
-            });
+
+            client.Init(
+                EndAccept(result), 
+                () => {
+                    _listClient.Remove(client);
+                    _poolClient.PutObject(client);
+                }
+             );
             
             _listClient.Add(client);
             BeginAccept(Accept, this);
@@ -75,10 +80,19 @@ namespace ServerCShop0
                 c.Send(message);
             }
         }
+
+        public void SendAllUdp(byte[] message)
+        {
+            foreach (Client c in _listClient)
+            {
+                c.SendUdp(message);
+            }
+        }
     }
     static class Program
     {
         public static Server _server;
+        public static ServerUdp _serverUdp;
         public static void ThreadServer()
         {
             _server = new Server();
@@ -86,8 +100,14 @@ namespace ServerCShop0
             //RedisRedis.TestReset();
             //RedisRedis.Test();
             //LibMySql.Test();
-            LibLog.Test();
+            //LibLog.Test();
             //ConnRedis.Test();
+        }
+
+        public static void ThreadServerUdp()
+        {
+            _serverUdp = new ServerUdp();
+           // ServerUdp.Test();
         }
 
         /// <summary>
@@ -96,13 +116,20 @@ namespace ServerCShop0
         [STAThread]
         static void Main()
         {
+            
             Thread threadServer = new Thread(new ThreadStart(ThreadServer));
             threadServer.Start();
-            threadServer.Join();
+           // threadServer.Join();
+
+            Thread threadServerUdp = new Thread(new ThreadStart(ThreadServerUdp));
+            threadServerUdp.Start();
+           // threadServerUdp.Join();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            
+ 
         }
     }
 }

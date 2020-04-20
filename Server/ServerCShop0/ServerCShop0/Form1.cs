@@ -33,6 +33,7 @@ namespace ServerCShop0
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(r, options);
 
             Program._server.SendAll(bytes);
+            Program._server.SendAllUdp(bytes);
         }
     }
 }

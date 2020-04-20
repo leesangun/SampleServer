@@ -33,6 +33,8 @@
             this.buttonRoomAreaJoin = new System.Windows.Forms.Button();
             this.buttonRoomAreaMessage = new System.Windows.Forms.Button();
             this.labelLog = new System.Windows.Forms.Label();
+            this.testUdp = new System.Windows.Forms.Button();
+            this.labelLogUdp = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -47,7 +49,7 @@
             // 
             // buttonLogin
             // 
-            this.buttonLogin.Location = new System.Drawing.Point(192, 254);
+            this.buttonLogin.Location = new System.Drawing.Point(386, 171);
             this.buttonLogin.Name = "buttonLogin";
             this.buttonLogin.Size = new System.Drawing.Size(75, 23);
             this.buttonLogin.TabIndex = 1;
@@ -57,7 +59,7 @@
             // 
             // buttonRoomAreaJoin
             // 
-            this.buttonRoomAreaJoin.Location = new System.Drawing.Point(386, 254);
+            this.buttonRoomAreaJoin.Location = new System.Drawing.Point(386, 211);
             this.buttonRoomAreaJoin.Name = "buttonRoomAreaJoin";
             this.buttonRoomAreaJoin.Size = new System.Drawing.Size(159, 23);
             this.buttonRoomAreaJoin.TabIndex = 2;
@@ -67,7 +69,7 @@
             // 
             // buttonRoomAreaMessage
             // 
-            this.buttonRoomAreaMessage.Location = new System.Drawing.Point(588, 253);
+            this.buttonRoomAreaMessage.Location = new System.Drawing.Point(386, 254);
             this.buttonRoomAreaMessage.Name = "buttonRoomAreaMessage";
             this.buttonRoomAreaMessage.Size = new System.Drawing.Size(159, 23);
             this.buttonRoomAreaMessage.TabIndex = 3;
@@ -84,11 +86,32 @@
             this.labelLog.TabIndex = 4;
             this.labelLog.Text = "labelLog";
             // 
+            // testUdp
+            // 
+            this.testUdp.Location = new System.Drawing.Point(653, 171);
+            this.testUdp.Name = "testUdp";
+            this.testUdp.Size = new System.Drawing.Size(75, 23);
+            this.testUdp.TabIndex = 5;
+            this.testUdp.Text = "udp";
+            this.testUdp.UseVisualStyleBackColor = true;
+            this.testUdp.Click += new System.EventHandler(this.testUdp_Click);
+            // 
+            // labelLogUdp
+            // 
+            this.labelLogUdp.AutoSize = true;
+            this.labelLogUdp.Location = new System.Drawing.Point(114, 129);
+            this.labelLogUdp.Name = "labelLogUdp";
+            this.labelLogUdp.Size = new System.Drawing.Size(88, 15);
+            this.labelLogUdp.TabIndex = 6;
+            this.labelLogUdp.Text = "labelLogUdp";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.labelLogUdp);
+            this.Controls.Add(this.testUdp);
             this.Controls.Add(this.labelLog);
             this.Controls.Add(this.buttonRoomAreaMessage);
             this.Controls.Add(this.buttonRoomAreaJoin);
@@ -109,6 +132,8 @@
         private System.Windows.Forms.Button buttonRoomAreaJoin;
         private System.Windows.Forms.Button buttonRoomAreaMessage;
         private System.Windows.Forms.Label labelLog;
+        private System.Windows.Forms.Button testUdp;
+        private System.Windows.Forms.Label labelLogUdp;
     }
 }
 

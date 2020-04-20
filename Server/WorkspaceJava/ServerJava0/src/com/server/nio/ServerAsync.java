@@ -95,7 +95,7 @@ class EchoHandler implements CompletionHandler<Integer, ByteBuffer>{
 			System.out.println("echo: " + msg);
 			
 			Charset charset = Charset.forName("UTF-8");
-			String data = "네이버 블로그는 부르곰";
+			String data = "1111";
 			ByteBuffer byteBuffer = charset.encode(data);
 			_channel.write(byteBuffer);
 			

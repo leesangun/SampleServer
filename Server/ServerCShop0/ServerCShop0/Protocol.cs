@@ -25,6 +25,7 @@
     }
 
     public class ReqLogin : BasePacket{
+        public int udpClientPort { get; set; }
         public string nick { get; set; }
     }
     public class ResLogin : ResRoomAreaList

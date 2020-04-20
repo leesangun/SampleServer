@@ -123,5 +123,21 @@ namespace ServerCShop0
                 c.Send(bytes);
             }
         }
+
+        public static void SendUdp(string idRoom, byte[] bytes)
+        {
+            foreach (BaseClientRoom c in _listRoom[idRoom]._listClient)
+            {
+                c.SendUdp(bytes);
+            }
+        }
+        public static void SendUdp(string idRoom, byte[] bytes, BaseClientRoom client)
+        {
+            foreach (BaseClientRoom c in _listRoom[idRoom]._listClient)
+            {
+                if (c == client) continue;
+                c.SendUdp(bytes);
+            }
+        }
     }
 }

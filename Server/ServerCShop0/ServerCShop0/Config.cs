@@ -15,6 +15,11 @@ namespace Lib
 {
     class Config
     {
+        public static readonly int 
+            PORT_TCP = 4000,
+            PORT_UDP = 7777;
+
+
         public static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
         {
             WriteIndented = true
