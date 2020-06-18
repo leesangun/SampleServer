@@ -1,0 +1,13 @@
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\bin\Debug\netcoreapp3.1\ServerCShop1.exe
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\bin\Debug\netcoreapp3.1\ServerCShop1.deps.json
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\bin\Debug\netcoreapp3.1\ServerCShop1.runtimeconfig.json
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\bin\Debug\netcoreapp3.1\ServerCShop1.runtimeconfig.dev.json
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\bin\Debug\netcoreapp3.1\ServerCShop1.dll
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\bin\Debug\netcoreapp3.1\ServerCShop1.pdb
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.csprojAssemblyReference.cache
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.AssemblyInfoInputs.cache
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.AssemblyInfo.cs
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.csproj.CoreCompileInputs.cache
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.dll
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.pdb
+E:\Devel\Git\SampleServer\Server\ServerCShop1\ServerCShop1\obj\Debug\netcoreapp3.1\ServerCShop1.genruntimeconfig.cache
