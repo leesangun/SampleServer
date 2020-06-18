@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerSuperSocket1x", "ServerSuperSocket1x\ServerSuperSocket1x.csproj", "{B8E4965F-7169-46A1-8D3B-E5F59089A91E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|anycpu = Debug|anycpu
+		Release|anycpu = Release|anycpu
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8E4965F-7169-46A1-8D3B-E5F59089A91E}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{B8E4965F-7169-46A1-8D3B-E5F59089A91E}.Debug|anycpu.Build.0 = Debug|anycpu
+		{B8E4965F-7169-46A1-8D3B-E5F59089A91E}.Release|anycpu.ActiveCfg = Release|anycpu
+		{B8E4965F-7169-46A1-8D3B-E5F59089A91E}.Release|anycpu.Build.0 = Release|anycpu
+	EndGlobalSection
+EndGlobal
